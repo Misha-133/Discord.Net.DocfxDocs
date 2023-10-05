@@ -14,4 +14,10 @@
     <PackageReference Include="Docfx.App" Version="2.71.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Pages\docs_being_built.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

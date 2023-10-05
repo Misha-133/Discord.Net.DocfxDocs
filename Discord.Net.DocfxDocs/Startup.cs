@@ -19,6 +19,9 @@ var app = builder.Build();
 
 
 var sitePath = Path.Combine(app.Environment.ContentRootPath, app.Configuration["Docs:site_root"]!);
+var pagesPath = Path.Combine(app.Environment.ContentRootPath, "Pages");
+
+var docsBeingBuiltPage = File.ReadAllText(Path.Combine(pagesPath, "docs_being_built.html"));
 
 if (!Directory.Exists(sitePath))
     Directory.CreateDirectory(sitePath);
@@ -35,32 +38,7 @@ app.Use(async (context, next) =>
 
     if (!tools.DocsAvailable)
     {
-        await context.Response.WriteAsync(
-            $$"""
-                  <html>
-                    <head>
-                        <title>Docs rebuild</title>
-                        <style>
-                            code {
-                                width: 95%;
-                                font-family: 'Source Code Pro', monospace;
-                                color: #43892a;
-                                background-color: #000;
-                                text-align: left;
-                                display: block;
-                                align: center
-                                 }
-                        </style>
-                    </head>
-                    <body align="center">
-                        <h2>Docs are being built, please wait...</h2>
-                        <br><br><br><br><br>
-                        <pre><code>
-                        {{string.Join('\n', tools.ConsoleHistory)}}
-                        </code></pre>
-                    </body>
-                  </html>
-                  """);
+        await context.Response.WriteAsync(docsBeingBuiltPage.Replace("@console_logs", string.Join('\n', tools.ConsoleHistory)));
     }
     else
     {
