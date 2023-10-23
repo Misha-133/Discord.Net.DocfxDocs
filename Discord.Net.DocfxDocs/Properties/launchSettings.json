@@ -21,7 +21,9 @@
       "commandName": "Docker",
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "http://+:5000"
+        "ASPNETCORE_URLS": "http://+:5000",
+        "DNet_PublicKey": "",
+        "DNet_Token": ""
       },
       "publishAllPorts": true
     }

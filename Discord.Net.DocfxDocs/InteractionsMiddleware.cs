@@ -35,7 +35,7 @@ public sealed class InteractionServiceMiddleware
     private readonly IServiceProvider _serviceProvider;
     private readonly RequestDelegate _next;
 
-    public InteractionServiceMiddleware(Discord.Rest.DiscordRestClient discordClient, InteractionService interactionService, string pbk, RequestDelegate next,
+    public InteractionServiceMiddleware(DiscordRestClient discordClient, InteractionService interactionService, string pbk, RequestDelegate next,
         IServiceProvider serviceProvider)
     {
         _discord = discordClient;

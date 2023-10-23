@@ -7,8 +7,9 @@ using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<DiscordNetDocsTools>();
+builder.Configuration.AddEnvironmentVariables(prefix: "DNet_");
 
+builder.Services.AddSingleton<DiscordNetDocsTools>();
 
 builder.Services.AddSingleton<DiscordRestClient>();
 builder.Services.AddHostedService<DiscordBot>();
@@ -28,7 +29,7 @@ if (!Directory.Exists(sitePath))
 
 app.Use(async (context, next) =>
 {
-    if (context.Request.Path.StartsWithSegments(app.Configuration["Discord:InteractionsPath"]))
+    if (context.Request.Path.StartsWithSegments(app.Configuration["DNet_PublicKey"]))
     {
         await next.Invoke();
         return;
@@ -46,7 +47,7 @@ app.Use(async (context, next) =>
     }
 });
 
-app.MapInteractionService("/discord-interactions", app.Configuration["Discord:PublicKey"]!);
+app.MapInteractionService("/discord-interactions", app.Configuration["DNet_PublicKey"]!);
 
 app.UseStaticFiles(new StaticFileOptions
 {

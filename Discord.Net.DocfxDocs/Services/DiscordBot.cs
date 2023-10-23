@@ -30,7 +30,7 @@ public class DiscordBot : IHostedService
         _client.Log += Log;
         _interactionService.Log += Log;
 
-        await _client.LoginAsync(TokenType.Bot, _config["Discord:Token"]);
+        await _client.LoginAsync(TokenType.Bot, _config["DNet_Token"]);
 
         await _interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), _serviceProvider);
         await _interactionService.RegisterCommandsGloballyAsync();
