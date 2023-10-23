@@ -29,7 +29,7 @@ if (!Directory.Exists(sitePath))
 
 app.Use(async (context, next) =>
 {
-    if (context.Request.Path.StartsWithSegments(app.Configuration["DNet_PublicKey"]))
+    if (context.Request.Path.StartsWithSegments(app.Configuration["Discord:InteractionsPath"]))
     {
         await next.Invoke();
         return;

@@ -5,3 +5,13 @@ Docs project for [Discord.Net](https://github.com/discord-net/Discord.Net)
 - rebuild docs with a command in discord
 - clone repo, pull updates & serve docs with no user input
 - *should* work fine in a docker container
+
+
+## Running docker container
+```bash
+docker run -d -e DNet_Token='' \
+-e DNet_PublicKey='' \
+-p 5000:5000 \
+--name dnet_docfx_docs \
+discord.net.docfxdocs
+```
