@@ -31,5 +31,5 @@ docker run -d -e DNet_Token='' \
 -e DNet_PublicKey='' \
 -p 5000:5000 \
 --name dnet_docfx_docs \
-ghcr.io/misha-133/discord.net.docfxdocs:latest
+ghcr.io/misha-133/discord.net.docfxdocs:master
 ```
