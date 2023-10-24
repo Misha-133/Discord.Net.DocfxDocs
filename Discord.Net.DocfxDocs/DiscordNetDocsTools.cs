@@ -114,16 +114,17 @@ public class DiscordNetDocsTools
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-            
 
-                capture.OnWriteLine -= (source, args) =>
+
+
+
+            }
+            capture.OnWriteLine -= (source, args) =>
                 {
                     if (ConsoleHistory.Count() >= 100)
                         ConsoleHistory.Dequeue();
                     ConsoleHistory.Enqueue(args.Line);
                 };
-
-            }
-
+        }
     }
 }
