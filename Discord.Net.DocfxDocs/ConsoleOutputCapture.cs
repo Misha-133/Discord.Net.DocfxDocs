@@ -23,15 +23,15 @@ public class ConsoleOutputCapture : TextWriter
     public override void Write(string? value)
     {
         pendingLine ??= new ();
-        pendingLine.Write(value);
+        pendingLine?.Write(value);
 
         if (value == "\n")
         {
-            OnWriteLine(this, new ConsoleCaptureArgs(pendingLine.ToString()));
+            OnWriteLine(this, new ConsoleCaptureArgs(pendingLine?.ToString() ?? string.Empty));
             pendingLine = null;
         }
 
-        stdOutWriter.Write(value);
+        stdOutWriter.Write(value ?? string.Empty);
     }
 
     public override void WriteLine(string? output)
@@ -43,7 +43,7 @@ public class ConsoleOutputCapture : TextWriter
         }
 
         OnWriteLine(this, new ConsoleCaptureArgs(output ?? string.Empty));
-        stdOutWriter.WriteLine(output);
+        stdOutWriter.WriteLine(output ?? string.Empty);
     }
 }
 
