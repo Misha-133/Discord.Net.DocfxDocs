@@ -81,6 +81,13 @@ public class DiscordNetDocsTools
 
     }
 
+    private void Log(object source, ConsoleCaptureArgs args)
+    {
+        if (ConsoleHistory.Count() >= 100)
+            ConsoleHistory.Dequeue();
+        ConsoleHistory.Enqueue(args.Line);
+    }
+
     public async Task BuildDocsAsync()
     {
         DocsAvailable = false;
@@ -90,12 +97,7 @@ public class DiscordNetDocsTools
 
         await using (var capture = new ConsoleOutputCapture())
         {
-            capture.OnWriteLine += (source, args) =>
-            {
-                if (ConsoleHistory.Count() >= 100)
-                    ConsoleHistory.Dequeue();
-                ConsoleHistory.Enqueue(args.Line);
-            };
+            capture.OnWriteLine += Log;
 
             try
             {
@@ -115,6 +117,8 @@ public class DiscordNetDocsTools
             {
                 _logger.LogError(ex, ex.Message);
             }
+
+            capture.OnWriteLine -= Log;
         }
 
     }
