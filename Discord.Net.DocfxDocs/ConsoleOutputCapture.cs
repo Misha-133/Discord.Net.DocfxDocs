@@ -1,5 +1,7 @@
 ﻿using System.Text;
 
+using YamlDotNet.Core.Tokens;
+
 namespace Discord.Net.DocfxDocs;
 
 public class ConsoleOutputCapture : TextWriter
@@ -44,6 +46,27 @@ public class ConsoleOutputCapture : TextWriter
 
         OnWriteLine(this, new ConsoleCaptureArgs(output ?? string.Empty));
         stdOutWriter.WriteLine(output ?? string.Empty);
+    }
+
+    public override void Write(string format, params object?[] arg)
+    {
+        pendingLine ??= new();
+        pendingLine?.Write(format, arg);
+
+        if (format == "\n")
+        {
+            OnWriteLine(this, new ConsoleCaptureArgs(pendingLine?.ToString() ?? string.Empty));
+            pendingLine = null;
+        }
+
+        OnWriteLine(this, new ConsoleCaptureArgs(string.Format(format, arg)));
+        stdOutWriter.Write(format, arg);
+    }
+
+    public override void WriteLine(string format, params object?[] arg)
+    {
+        OnWriteLine(this, new ConsoleCaptureArgs(string.Format(format, arg)));
+        stdOutWriter.WriteLine(format, arg);
     }
 }
 

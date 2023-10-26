@@ -69,7 +69,7 @@ public class DiscordNetDocsTools
     {
         using var repo = new Repository(_repoRoot);
 
-        PullOptions options = new PullOptions();
+        var options = new PullOptions();
 
         var signature = new Signature(
             new Identity("dnet_bot", "amongus@among.us"), DateTimeOffset.Now);
@@ -88,43 +88,34 @@ public class DiscordNetDocsTools
         _logger.LogInformation("Building docs...");
         ConsoleHistory.Clear();
 
-        await using (var capture = new ConsoleOutputCapture())
+        await using var capture = new ConsoleOutputCapture();
+
+        capture.OnWriteLine += (source, args) =>
         {
-            capture.OnWriteLine += (source, args) =>
-            {
-                if (ConsoleHistory.Count() >= 100)
-                    ConsoleHistory.Dequeue();
-                ConsoleHistory.Enqueue(args.Line);
-            };
+            if (ConsoleHistory.Count >= 100)
+                ConsoleHistory.Dequeue();
+            ConsoleHistory.Enqueue(args.Line);
+        };
 
-            try
-            {
-                await DotnetApiCatalog.GenerateManagedReferenceYamlFiles(Path.Combine(_repoRoot, "docs", "docfx.json"));
+        try
+        {
+            await DotnetApiCatalog.GenerateManagedReferenceYamlFiles(Path.Combine(_repoRoot, "docs", "docfx.json"));
 
-                await Docset.Build(Path.Combine(_repoRoot, "docs", "docfx.json"));
+            await Docset.Build(Path.Combine(_repoRoot, "docs", "docfx.json"));
 
-                DocsAvailable = true;
+            DocsAvailable = true;
 
-                _logger.LogInformation("Build complete. Copying to static root...");
+            _logger.LogInformation("Build complete. Copying to static root...");
 
-                FileUtils.CopyFiles(Path.Combine(_repoRoot, "docs", "_site"), _siteRoot);
+            FileUtils.CopyFiles(Path.Combine(_repoRoot, "docs", "_site"), _siteRoot);
 
-                _logger.LogInformation("Copy complete");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
+            _logger.LogInformation("Copy complete");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
 
-
-
-
-            }
-            capture.OnWriteLine -= (source, args) =>
-                {
-                    if (ConsoleHistory.Count() >= 100)
-                        ConsoleHistory.Dequeue();
-                    ConsoleHistory.Enqueue(args.Line);
-                };
+            throw;
         }
     }
 }
