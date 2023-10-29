@@ -1,30 +1,172 @@
-﻿<!DOCTYPE html>
-<html>
+﻿<html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <title>Docs rebuild</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord.NET Documentation</title>
+    <meta name="description" content="The documentation is currently being built.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Roboto+Mono&display=swap"
+          rel="stylesheet">
     <style>
-        code {
-            width: 95%;
-            font-family: 'Source Code Pro', monospace;
-            color: #43892a;
-            background-color: #000;
-            text-align: left;
-            display: block;
-            align: center;
+        /* Box sizing rules */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
         }
+
+        /* Remove default margin */
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        p,
+        figure,
+        blockquote,
+        dl,
+        dd {
+            margin: 0;
+        }
+
+        /* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+        ul[role='list'],
+        ol[role='list'] {
+            list-style: none;
+        }
+
+        /* Set core root defaults */
+        html:focus-within {
+            scroll-behavior: smooth;
+        }
+
+        /* Set core body defaults */
+        body {
+            min-height: 100vh;
+            text-rendering: optimizeSpeed;
+            line-height: 1.5;
+        }
+
+        /* A elements that don't have a class get default styles */
+        a:not([class]) {
+            text-decoration-skip-ink: auto;
+        }
+
+        /* Make images easier to work with */
+        img,
+        picture {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* Inherit fonts for inputs and buttons */
+        input,
+        button,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+        @media (prefers-reduced-motion: reduce) {
+            html:focus-within {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+    <style>
+        body {
+            color-scheme: dark;
+        }
+
+        ::selection {
+            background-color: rgb(0, 115, 197);
+        }
+
+        #backdrop {
+            font-family: "Inter", sans-serif;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #121212;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        #title {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: rgb(0, 0, 0);
+            background: linear-gradient(180deg, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 100%);
+            pointer-events: none;
+        }
+
+        h1 {
+            font-weight: 600;
+        }
+
+        #console {
+            padding: 0;
+            font-family: "Roboto Mono", monospace;
+            bottom: 0;
+            margin: 0;
+            overflow-y: auto;
+            overflow-x: scroll;
+            height: 60vh;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        ol {
+            counter-reset: item;
+        }
+
+            ol li {
+                counter-increment: item;
+                white-space: nowrap;
+            }
+
+                ol li:before {
+                    content: "["counter(item)"]: ";
+                    text-align: right;
+                    display: inline-block;
+                    color: rgb(0 149 255);
+                    width: 70px;
+                    margin: 0;
+                    margin-right: 10px;
+                }
     </style>
 </head>
 
 <body>
-    <h2>Docs are being built, please wait...</h2>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <pre><code>@console_logs</code></pre>
+    <div id="backdrop">
+        <div id="title">
+            <h1>The documentation <span id="status">is loading</span>.</h1>
+            <p id="header-text">It should be ready in a few minutes.</p>
+        </div>
+        <ol id="console">
+            @console_logs
+        </ol>
+    </div>
 </body>
 
 </html>

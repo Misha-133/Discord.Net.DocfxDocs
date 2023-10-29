@@ -1,7 +1,5 @@
 ﻿using System.Text;
 
-using YamlDotNet.Core.Tokens;
-
 namespace Discord.Net.DocfxDocs;
 
 public class ConsoleOutputCapture : TextWriter
