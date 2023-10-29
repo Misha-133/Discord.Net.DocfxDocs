@@ -157,6 +157,12 @@ public class ConsoleOutputCapture : TextWriter
         OnWriteLine(this, new ConsoleCaptureArgs(value?.ToString() ?? string.Empty));
         stdOutWriter.WriteLine(value?.ToString() ?? string.Empty);
     }
+
+    public override ValueTask DisposeAsync()
+    {
+        Console.SetOut(stdOutWriter);
+        return base.DisposeAsync();
+    }
 }
 
 public class ConsoleCaptureArgs : EventArgs
