@@ -1,5 +1,7 @@
 ﻿using System.Text;
 
+using Json.Schema;
+
 namespace Discord.Net.DocfxDocs;
 
 public class ConsoleOutputCapture : TextWriter
@@ -34,16 +36,18 @@ public class ConsoleOutputCapture : TextWriter
         stdOutWriter.Write(value ?? string.Empty);
     }
 
-    public override void WriteLine(string? output)
+    public override void Write(object? value)
     {
-        if (pendingLine is not null)
-        { 
-            OnWriteLine(this, new ConsoleCaptureArgs(pendingLine.ToString()));
+        pendingLine ??= new();
+        pendingLine?.Write(value?.ToString());
+
+        if (value is "\n")
+        {
+            OnWriteLine(this, new ConsoleCaptureArgs(pendingLine?.ToString() ?? string.Empty));
             pendingLine = null;
         }
 
-        OnWriteLine(this, new ConsoleCaptureArgs(output ?? string.Empty));
-        stdOutWriter.WriteLine(output ?? string.Empty);
+        stdOutWriter.Write(value?.ToString() ?? string.Empty);
     }
 
     public override void Write(string format, params object?[] arg)
@@ -61,10 +65,97 @@ public class ConsoleOutputCapture : TextWriter
         stdOutWriter.Write(format, arg);
     }
 
+    public override void Write(string format, object? arg)
+    {
+        pendingLine ??= new();
+        pendingLine?.Write(format, arg);
+
+        if (format == "\n")
+        {
+            OnWriteLine(this, new ConsoleCaptureArgs(pendingLine?.ToString() ?? string.Empty));
+            pendingLine = null;
+        }
+
+        OnWriteLine(this, new ConsoleCaptureArgs(string.Format(format, arg)));
+        stdOutWriter.Write(format, arg);
+    }
+
+    public override void Write(string format, object? arg1, object? arg2)
+    {
+        pendingLine ??= new();
+        pendingLine?.Write(format, arg1, arg2);
+
+        if (format == "\n")
+        {
+            OnWriteLine(this, new ConsoleCaptureArgs(pendingLine?.ToString() ?? string.Empty));
+            pendingLine = null;
+        }
+
+        OnWriteLine(this, new ConsoleCaptureArgs(string.Format(format, arg1, arg2)));
+        stdOutWriter.Write(format, arg1, arg2);
+    }
+
+    public override void Write(string format, object? arg1, object? arg2, object? arg3)
+    {
+        pendingLine ??= new();
+        pendingLine?.Write(format, arg1, arg2, arg3);
+
+        if (format == "\n")
+        {
+            OnWriteLine(this, new ConsoleCaptureArgs(pendingLine?.ToString() ?? string.Empty));
+            pendingLine = null;
+        }
+
+        OnWriteLine(this, new ConsoleCaptureArgs(string.Format(format, arg1, arg2, arg3)));
+        stdOutWriter.Write(format, arg1, arg2, arg3);
+    }
+
+    public override void WriteLine(string? output)
+    {
+        if (pendingLine is not null)
+        { 
+            OnWriteLine(this, new ConsoleCaptureArgs(pendingLine.ToString()));
+            pendingLine = null;
+        }
+
+        OnWriteLine(this, new ConsoleCaptureArgs(output ?? string.Empty));
+        stdOutWriter.WriteLine(output ?? string.Empty);
+    }
+
     public override void WriteLine(string format, params object?[] arg)
     {
         OnWriteLine(this, new ConsoleCaptureArgs(string.Format(format, arg)));
         stdOutWriter.WriteLine(format, arg);
+    }
+
+    public override void WriteLine(string format, object? arg)
+    {
+        OnWriteLine(this, new ConsoleCaptureArgs(string.Format(format, arg)));
+        stdOutWriter.WriteLine(format, arg);
+    }
+
+    public override void WriteLine(string format, object? arg1, object? arg2)
+    {
+        OnWriteLine(this, new ConsoleCaptureArgs(string.Format(format, arg1, arg2)));
+        stdOutWriter.WriteLine(format, arg1, arg2);
+    }
+
+    public override void WriteLine(string format, object? arg1, object? arg2, object? arg3)
+    {
+        OnWriteLine(this, new ConsoleCaptureArgs(string.Format(format, arg1, arg2, arg3)));
+        stdOutWriter.WriteLine(format, arg1, arg2, arg3);
+    }
+
+    public override void WriteLine(StringBuilder? value)
+    {
+        OnWriteLine(this, new ConsoleCaptureArgs(value?.ToString() ?? string.Empty));
+        stdOutWriter.WriteLine(value?.ToString() ?? string.Empty);
+    }
+
+    public override void WriteLine(object? value)
+    {
+        OnWriteLine(this, new ConsoleCaptureArgs(value?.ToString() ?? string.Empty));
+        stdOutWriter.WriteLine(value?.ToString() ?? string.Empty);
     }
 }
 
