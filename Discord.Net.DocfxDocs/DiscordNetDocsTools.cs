@@ -1,6 +1,8 @@
 ﻿using Docfx;
 using Docfx.Dotnet;
 
+using ICSharpCode.Decompiler.Metadata;
+
 using LibGit2Sharp;
 
 namespace Discord.Net.DocfxDocs;
@@ -88,14 +90,16 @@ public class DiscordNetDocsTools
         _logger.LogInformation("Building docs...");
         ConsoleHistory.Clear();
 
-        await using var capture = new ConsoleOutputCapture();
-
-        capture.OnWriteLine += (source, args) =>
+        void Log(object? source, ConsoleCaptureArgs args)
         {
             if (ConsoleHistory.Count >= 100)
                 ConsoleHistory.Dequeue();
             ConsoleHistory.Enqueue(args.Line);
-        };
+        }
+
+        await using var capture = new ConsoleOutputCapture();
+        
+        capture.OnWriteLine += Log;
 
         try
         {
@@ -117,5 +121,8 @@ public class DiscordNetDocsTools
 
             throw;
         }
+
+        capture.OnWriteLine -= Log;
+        await capture.DisposeAsync();
     }
 }
