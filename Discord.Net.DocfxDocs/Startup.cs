@@ -39,7 +39,7 @@ app.Use(async (context, next) =>
 
     if (!tools.DocsAvailable)
     {
-        await context.Response.WriteAsync(docsBeingBuiltPage.Replace("@console_logs", "<li>" + string.Join("</li>\n<li>", $"{tools.ConsoleHistory}") + "</li>"));
+        await context.Response.WriteAsync(docsBeingBuiltPage.Replace("@console_logs", "<li>" + string.Join("</li>\n<li>", tools.ConsoleHistory) + "</li>"));
     }
     else
     {
