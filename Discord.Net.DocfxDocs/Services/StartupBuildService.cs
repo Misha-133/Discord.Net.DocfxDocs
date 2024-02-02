@@ -6,6 +6,13 @@ public class StartupBuildService : BackgroundService
     private readonly DiscordNetDocsTools _tools;
     private readonly IConfiguration _configuration;
 
+	public StartupBuildService(ILogger<StartupBuildService> logger, DiscordNetDocsTools tools, IConfiguration configuration)
+	{
+		_logger = logger;
+		_tools = tools;
+		_configuration = configuration;
+	}
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         if (!_configuration.GetValue<bool>("BuildOnStartup"))
