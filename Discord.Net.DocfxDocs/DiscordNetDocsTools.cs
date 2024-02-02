@@ -1,8 +1,6 @@
 ﻿using Docfx;
 using Docfx.Dotnet;
 
-using ICSharpCode.Decompiler.Metadata;
-
 using LibGit2Sharp;
 
 namespace Discord.Net.DocfxDocs;

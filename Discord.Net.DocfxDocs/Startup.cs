@@ -15,6 +15,7 @@ builder.Services.AddSingleton<DiscordRestClient>();
 builder.Services.AddHostedService<DiscordBot>();
 
 builder.Services.AddInteractionService(config => config.UseCompiledLambda = true);
+builder.Services.AddHostedService<StartupBuildService>();
 
 var app = builder.Build();
 
